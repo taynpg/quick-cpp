@@ -24,7 +24,9 @@ bool parse_args(int argc, char** argv, SConfig& config)
 int main(int argc, char** argv)
 {
     SConfig config{};
-    ConfigOpr::read_config(config);
+    ConfigOpr configOpr{};
+    configOpr.read_config(config);
+    
     if (!parse_args(argc, argv, config)) {
         return -1;
     }

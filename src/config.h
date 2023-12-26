@@ -1,12 +1,11 @@
 #pragma once
 
-#include <QDir>
-#include <QString>
 #include <string>
+#include <boost/filesystem.hpp>
 
 struct SConfig {
     std::string config_path{};
-    int     font_size{14};
+    int         font_size{14};
     std::string font_family{};
     std::string query_driver{};
     std::string qt_dir{};
@@ -14,6 +13,8 @@ struct SConfig {
     std::string project_type{};
     std::string compiler{};
     std::string type{};
+    std::string project_name{};
+    std::string project_dir{};
 };
 
 class ConfigOpr {
@@ -22,6 +23,8 @@ public:
     ~ConfigOpr() = default;
 
 public:
-    static void read_config(SConfig& config);
-    static void set_default(const QString& config_path);
+    void read_config(SConfig& config);
+    void set_default(const std::string& config_path);
+private:
+    std::string get_home();
 };

@@ -1,7 +1,17 @@
 #include "config.h"
 
-#include <QSettings>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/ini_parser.hpp>
 
+#if defined(__clang__) && defined(__APPLE__)
+//#include <mach-o/dyld.h>
+#elif defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__)
+//#include <windows.h>
+#else
+#include <unistd.h>
+#include <sys/types.h>
+#include <pwd.h>
+#endif
 
 constexpr auto DEFAULT_PROJECT_TYPE = "DefaultProjectType";
 constexpr auto QT_DIR = "QtDir";
@@ -11,40 +21,59 @@ constexpr auto FONT_SIZE = "FontSize";
 constexpr auto FONT_FAMILY = "FontFamily";
 constexpr auto QUERY_DRIVER = "QueryDriver";
 
-void ConfigOpr::read_config(SConfig& config)
-{
-    QString home = QDir::homePath();
-    QString config_dir = home + "/.config/quick-cpp";
-    QString logfile = config_dir + "/config.ini";
-    config.config_path.append(logfile.toLocal8Bit().constData());
+namespace fs = boost::filesystem;
 
-    QDir dir(config_dir);
-    if (!dir.exists()) {
-        dir.mkdir(config_dir);
+std::string ConfigOpr::get_home()
+{
+#if defined(__clang__) && defined(__APPLE__)
+    return "";
+#elif defined(_MSC_VER) || defined(__MINGW32__) || defined(__MINGW64__)
+    return std::getenv("USERPROFILE");
+#else
+    const char *homedir{};
+    if ((homedir = getenv("HOME")) == NULL) {
+        homedir = getpwuid(getuid())->pw_dir;
     }
-    if (!QFile::exists(logfile)) {
-        set_default(logfile);
-        return;
-    }
+    return std::string(homedir);
+#endif
 }
 
-void ConfigOpr::set_default(const QString& config_path)
+void ConfigOpr::read_config(SConfig& config)
 {
-    QSettings* settings = new QSettings(config_path, QSettings::IniFormat);
-    settings->beginGroup("Basic");
+    std::string home = get_home();
+    fs::path config_dir = fs::path(home).append(".config").append("quick-cpp");
+    fs::path logfile = fs::path(config_dir).append("config.ini");
 
-    // common,boost,qt
-    settings->setValue(DEFAULT_PROJECT_TYPE, "common");
+    if (!fs::exists(config_dir)) {
+        fs::create_directory(config_dir);
+    }
+    if (!fs::exists(logfile)) {
+        set_default(logfile.string());
+        return;
+    }
+    boost::property_tree::ptree pt, node;
+    boost::property_tree::ini_parser::read_ini(logfile.string(), pt);
+    node = pt.get_child("Basic");
 
-    settings->setValue(QT_DIR, R"(C:\Qt\Qt5.14.2\5.14.2\msvc2017_64)");
-    settings->setValue(BOOST_DIR, R"(C:\Bin\Boost)");
-    settings->setValue(FONT_SIZE, 15);
-    settings->setValue(FONT_FAMILY, "FiraCode Nerd Font Mono");
-    settings->setValue(QUERY_DRIVER, "/usr/bin/g++");
+    config.type = node.get<std::string>(DEFAULT_PROJECT_TYPE, "common");
+    config.boost_dir = node.get<std::string>(BOOST_DIR, R"(C:\Bin\Boost)");
+    config.font_size = node.get<int>(FONT_SIZE, 15);
+    config.font_family = node.get<std::string>(FONT_FAMILY, "FiraCode Nerd Font Mono");
+    config.query_driver = node.get<std::string>(QUERY_DRIVER, "/usr/bin/g++");
+    config.compiler = node.get<std::string>(COMPILER, "msvc");
+}
 
-    // msvc,gnu,clang
-    settings->setValue(COMPILER, "msvc");
+void ConfigOpr::set_default(const std::string& config_path)
+{
+    boost::property_tree::ptree pt, node;
 
-    settings->endGroup();
-    delete settings;
+    node.put(DEFAULT_PROJECT_TYPE, "common");
+    node.put(BOOST_DIR, R"(C:\Bin\Boost)");
+    node.put(FONT_SIZE, 15);
+    node.put(FONT_FAMILY, "FiraCode Nerd Font Mono");
+    node.put(QUERY_DRIVER, "/usr/bin/g++");
+    node.put(COMPILER, "msvc");
+    pt.put_child("Basic", node);
+
+    boost::property_tree::ini_parser::write_ini(config_path, pt);
 }

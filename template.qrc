@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>template/settings-clang.json</file>
+        <file>template/settings-gnu.json</file>
+        <file>template/settings-msvc.json</file>
+        <file>template/common/CMakeLists.txt</file>
+        <file>template/common/main.cpp</file>
+    </qresource>
+</RCC>
