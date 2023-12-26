@@ -1,14 +1,22 @@
 {
-   "files.autoSave": "onFocusChange",
-   "editor.fontSize": 14,
-   "editor.fontFamily": "'FiraCode Nerd Font Mono', 'FiraCode Nerd Font Mono', 'FiraCode Nerd Font Mono'",
-   "cmake.configureOnOpen": true,
-   "cmake.debugConfig": {
-       "console": "integratedTerminal",
-   },
-   "cmake.generator": "Ninja",
-   "C_Cpp.intelliSenseEngine": "disabled",
-   "clangd.arguments": [
+    "files.autoSave": "onFocusChange",
+    "editor.fontSize": 14,
+    "editor.fontFamily": "'FiraCode Nerd Font Mono', 'FiraCode Nerd Font Mono', 'FiraCode Nerd Font Mono'",
+    "cmake.configureOnOpen": true,
+    "cmake.debugConfig": {
+        "console": "integratedTerminal",
+        "visualizerFile": "${workspaceRoot}/.vscode/qt5.natvis",
+        "args": [
+            "-t", "boost"
+        ]
+    },
+    "cmake.environment": {
+        "PATH": "${env:PATH};C:\\Qt\\Qt5.14.2\\5.14.2\\msvc2017\\bin"
+    },
+    "cmake.options.statusBarVisibility": "visible",
+    "cmake.generator": "Ninja",
+    "C_Cpp.intelliSenseEngine": "disabled",
+    "clangd.arguments": [
         "--header-insertion=never",
         "--all-scopes-completion",
         "--completion-style=detailed",
@@ -20,9 +28,9 @@
         "--ranking-model=heuristics",
         "--function-arg-placeholders=false",
         "--query-driver=/usr/bin/clang++"
-   ],
-   "editor.inlayHints.enabled": "off",
-   "editor.unicodeHighlight.allowedLocales": {
+    ],
+    "editor.inlayHints.enabled": "off",
+    "editor.unicodeHighlight.allowedLocales": {
         "ja": true,
         "zh-hant": true,
         "zh-hans": true
