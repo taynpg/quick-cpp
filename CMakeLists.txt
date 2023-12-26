@@ -17,11 +17,13 @@ if (MSVC)
 endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rd/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core)
 
 set(PROJECT_SOURCES
         main.cpp
+        src/config.cpp
 )
 
 add_executable(qcpp ${PROJECT_SOURCES})
