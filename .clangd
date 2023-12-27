@@ -6,6 +6,7 @@ Diagnostics:
         anon_type_definition,   # 禁用匿名的typedef提示
         unused-variable,        # 禁用未使用变量提示
         unused-function,        # 禁用未使用函数提示
+        unused-includes
     ]
     ClangTidy:
         Remove: misc-unused-alias-decls

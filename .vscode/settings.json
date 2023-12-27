@@ -7,7 +7,7 @@
         "console": "integratedTerminal",
         "visualizerFile": "${workspaceRoot}/.vscode/qt5.natvis",
         "args": [
-            "-t", "boost"
+            "-t", "common", "-d", "D:\\", "-n", "Hello"
         ]
     },
     "cmake.environment": {

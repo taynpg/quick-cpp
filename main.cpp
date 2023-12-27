@@ -1,5 +1,6 @@
 #include <iostream>
 #include "src/config.h"
+#include "src/project_opr.h"
 #include <CLI11.hpp>
 #include <string>
 
@@ -17,6 +18,9 @@ bool parse_args(int argc, char** argv, SConfig& config)
                    "[boost,默认使用boost的工程]\n"
                    "[qt,默认使用qt的工程]");
 
+    app.add_option("-d,--dir", config.project_dir, "工程所在目录");
+    app.add_option("-n,--name", config.project_name, "工程名称");
+
     CLI11_PARSE(app, argc, argv);
     return true;
 }
@@ -31,6 +35,13 @@ int main(int argc, char** argv)
         return -1;
     }
 
-    std::cout << "end..." << std::endl;
+    ProjectOpr opr{};
+    if (!opr.Run(config)) {
+        std::cout << "失败！" << std::endl;
+    }
+    else {
+        std::cout << "成功！" << std::endl;
+    }
+
     return 0;
 }
