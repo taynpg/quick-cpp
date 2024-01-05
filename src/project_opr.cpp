@@ -1,35 +1,39 @@
 #include "project_opr.h"
 
+#include <QFile>
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 #include <fstream>
 #include <iostream>
-#include <QFile>
+
 
 namespace fs = boost::filesystem;
 
 bool ProjectOpr::Run(const SConfig& config)
 {
     config_ = config;
-    
-    std::string purpose_dir = fs::path(config_.project_dir).append(config.project_name).string();
-    if (fs::exists(purpose_dir)) {
+
+    purpose_dir_ =
+        fs::path(config_.project_dir).append(config.project_name).string();
+    if (fs::exists(purpose_dir_)) {
         error_ = u8"文件夹已存在。";
         return false;
     }
     clear();
-    source_main = "://template/" + config_.project_type + "/main.cpp";
-    des_main = fs::path(purpose_dir).append("main.cpp").string();
-    source_cmakelist = "://template/" + config_.project_type + "/CMakeLists.txt";
-    des_cmakelist =
-        fs::path(purpose_dir).append("CMakeLists.txt").string();
-
-    source_setting = "://template/settings-" + config_.compiler + ".json";
-    vscode_dir = fs::path(purpose_dir).append(".vscode").string();
+    des_cmakelist = fs::path(purpose_dir_).append("CMakeLists.txt").string();
     des_setting = fs::path(vscode_dir).append("settings.json").string();
+    vscode_dir = fs::path(purpose_dir_).append(".vscode").string();
 
-    fs::create_directory(purpose_dir);
-    fs::create_directory(vscode_dir);
+    if (config_.project_type == "qt") {
+        QFile::copy(
+            "://template/qt5.natvis",
+            QString::fromLocal8Bit(
+                fs::path(vscode_dir).append("qt5.natvis").string().c_str()));
+        QFile::copy(
+            "://template/qt6.natvis",
+            QString::fromLocal8Bit(
+                fs::path(vscode_dir).append("qt6.natvis").string().c_str()));
+    }
 
     handle_setting();
     handle_main();
@@ -58,6 +62,14 @@ void ProjectOpr::handle_setting()
         newa = "";
         newb = "";
     }
+    if (config_.project_type == "qt") {
+        newa =
+            ",\n        \"visualizerFile\": "
+            "\"${workspaceRoot}/.vscode/qt6.natvis\"";
+        newb =
+            "\n    \"cmake.environment\": {\n        \"PATH\": \"${env:PATH};";
+        newb.append(config_.qt_dir + "/bin\"\n    },");
+    }
     boost::replace_all(setting, "replaceA", newa);
     boost::replace_all(setting, "replaceB", newb);
     boost::replace_all(setting, "replaceC", std::to_string(config_.font_size));
@@ -71,10 +83,20 @@ void ProjectOpr::handle_setting()
 
 void ProjectOpr::handle_main()
 {
-    QFile::copy(QString::fromStdString(source_main), QString::fromStdString(des_main));
+    if (config_.project_type == "console" || config_.project_type == "boost") {
+        QFile::copy(QString::fromLocal8Bit(source_main.c_str()),
+                    QString::fromLocal8Bit(des_main.c_str()));
+    }
+    if (config_.project_type == "qt") {
+        fs::path dir = fs::path(des_main).parent_path();
+        std::string m(fs::path(dir).append("main.cpp").string());
+        std::string mwc(fs::path(dir).append("MainWidget.cpp").string());
+        std::string mwh(fs::path(dir).append("MainWidget.h").string());
+        std::string mu(fs::path(dir).append("MainWidget.ui").string());
+    }
 }
 
-void ProjectOpr::handle_cmakelist() 
+void ProjectOpr::handle_cmakelist()
 {
     std::string cmakelist = read_txt(source_cmakelist);
     boost::replace_all(cmakelist, "replace", config_.project_name);
@@ -84,14 +106,11 @@ void ProjectOpr::handle_cmakelist()
     write_txt(des_cmakelist, cmakelist);
 }
 
-std::string ProjectOpr::get_last_error()
-{
-    return error_;
-}
+std::string ProjectOpr::get_last_error() { return error_; }
 
 std::string ProjectOpr::read_txt(const std::string& path)
 {
-    std::string   result{};
+    std::string result{};
 
     QFile file(QString::fromStdString(path));
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -123,4 +142,21 @@ bool ProjectOpr::write_txt(const std::string& path, const std::string& content)
     out << content;
     out.close();
     return true;
+}
+
+bool ProjectConsoleOpr::Run(const SConfig& config)
+{
+    if (!ProjectOpr::Run(config)) {
+        return false;
+    }
+     source_main = "://template/" + config_.project_type + "/main.cpp";
+    des_main = fs::path(purpose_dir_).append("main.cpp").string();
+    source_cmakelist =
+        "://template/" + config_.project_type + "/CMakeLists.txt";
+
+
+    source_setting = "://template/settings-" + config_.compiler + ".json";
+
+    fs::create_directory(purpose_dir_);
+    fs::create_directory(vscode_dir);
 }

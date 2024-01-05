@@ -6,5 +6,7 @@
         <file>resource/ico.ico</file>
         <file>template/console/CMakeLists.txt</file>
         <file>template/console/main.cpp</file>
+        <file>template/qt5.natvis</file>
+        <file>template/qt6.natvis</file>
     </qresource>
 </RCC>
