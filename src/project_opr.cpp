@@ -14,7 +14,7 @@ bool ProjectOpr::Run(const SConfig& config)
     
     std::string purpose_dir = fs::path(config_.project_dir).append(config.project_name).string();
     if (fs::exists(purpose_dir)) {
-        std::cout << "文件夹已存在。" << std::endl;
+        error_ = u8"文件夹已存在。";
         return false;
     }
     clear();
@@ -60,6 +60,8 @@ void ProjectOpr::handle_setting()
     }
     boost::replace_all(setting, "replaceA", newa);
     boost::replace_all(setting, "replaceB", newb);
+    boost::replace_all(setting, "replaceC", std::to_string(config_.font_size));
+    boost::replace_all(setting, "replaceD", config_.font_family);
 
     if (setting.empty()) {
         return;
@@ -82,6 +84,11 @@ void ProjectOpr::handle_cmakelist()
     write_txt(des_cmakelist, cmakelist);
 }
 
+std::string ProjectOpr::get_last_error()
+{
+    return error_;
+}
+
 std::string ProjectOpr::read_txt(const std::string& path)
 {
     std::string   result{};
@@ -92,7 +99,7 @@ std::string ProjectOpr::read_txt(const std::string& path)
         file.close();
         result.append(content.toLocal8Bit().constData());
     } else {
-        std::cout << "读取：" << path << "失败!\n";
+        std::cout << u8"读取：" << path << u8"失败!";
     }
     // std::ifstream in(path, std::ios::in);
     // if (!in.is_open()) {
@@ -110,7 +117,7 @@ bool ProjectOpr::write_txt(const std::string& path, const std::string& content)
 {
     std::ofstream out(path, std::ios::out);
     if (!out.is_open()) {
-        std::cout << "打开：" << path << "失败!\n";
+        error_ = u8"打开：" + path + u8"失败!";
         return false;
     }
     out << content;

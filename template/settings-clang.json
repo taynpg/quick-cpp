@@ -1,7 +1,7 @@
 {
     "files.autoSave": "onFocusChange",
-    "editor.fontSize": 14,
-    "editor.fontFamily": "'FiraCode Nerd Font Mono', 'FiraCode Nerd Font Mono', 'FiraCode Nerd Font Mono'",
+    "editor.fontSize": replaceC,
+    "editor.fontFamily": "'replaceD', 'replaceD', 'replaceD'",
     "cmake.configureOnOpen": true,
     "cmake.debugConfig": {
         "console": "integratedTerminal",

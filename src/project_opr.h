@@ -12,6 +12,7 @@ public:
 
 public:
     bool Run(const SConfig& config);
+    std::string get_last_error();
 
 private:
     std::string read_txt(const std::string& path);
@@ -31,4 +32,5 @@ private:
     std::string source_setting{};
     std::string vscode_dir{};
     std::string des_setting{};
+    std::string error_{};
 };

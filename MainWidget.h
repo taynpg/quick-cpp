@@ -7,6 +7,7 @@
 #include <string>
 
 #include "src/config.h"
+#include "src/project_opr.h"
 
 
 std::string ss(const QString& str);
@@ -29,6 +30,7 @@ private:
     void init_ui();
     void read_ini();
     void oper();
+    SConfig read_ui();
 
 private:
     void save_ini(bool is_notice = true);
@@ -43,5 +45,6 @@ private:
 private:
     Ui::MainWidget* ui;
     ConfigOpr       opr_{};
+    ProjectOpr      project_{};
 };
 #endif  // MAINWIDGET_H

@@ -6,7 +6,6 @@
 namespace fs = boost::filesystem;
 
 struct SConfig {
-    std::string config_path{};
     int         font_size{14};
     std::string font_family{};
     std::string query_driver{};

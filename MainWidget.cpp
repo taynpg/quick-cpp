@@ -77,23 +77,31 @@ void MainWidget::init_ui()
 
 void MainWidget::save_ini(bool is_notice)
 {
-    SConfig config{};
-    config.project_type = ss(ui->cbProjectType->currentText());
-    config.project_dir = ss(ui->edProjectDir->text());
-    config.font_size = ui->cbFontSize->currentText().toInt();
-    config.font_family = ss(ui->fontComboBox->currentFont().family());
-    config.boost_dir = ss(ui->edBoostPath->text());
-    config.qt_dir = ss(ui->edQtPath->text());
-    config.compiler = ss(ui->cbCompileType->currentText());
-    config.query_driver = ss(ui->edCompilePath->text());
+    SConfig config = read_ui();
     opr_.save_config(config);
 
     if (is_notice) {
-        QMessageBox::information(this, u8"提示", "已保存");
+        QMessageBox::information(this, u8"提示", u8"已保存");
     }
 }
 
-void MainWidget::generate_project() { save_ini(); }
+void MainWidget::generate_project()
+{
+    save_ini(false);
+    SConfig config = read_ui();
+
+    if (config.project_name.empty()) {
+        QMessageBox::information(this, u8"提示", u8"工程名为空");
+        return;
+    }
+
+    if (project_.Run(config)) {
+        QMessageBox::information(this, u8"提示", u8"已生成");
+    }
+    else {
+        QMessageBox::information(this, u8"提示", u8"生成失败，" + QString::fromStdString(project_.get_last_error()));
+    }
+}
 
 void MainWidget::oper()
 {
@@ -115,6 +123,21 @@ void MainWidget::oper()
     connect(ui->btnSave, &QPushButton::clicked, this, [=]() { save_ini(); });
     connect(ui->btnGenereate, &QPushButton::clicked, this,
             &MainWidget::generate_project);
+}
+
+SConfig MainWidget::read_ui()
+{
+    SConfig config{};
+    config.project_type = ss(ui->cbProjectType->currentText());
+    config.project_dir = ss(ui->edProjectDir->text());
+    config.font_size = ui->cbFontSize->currentText().toInt();
+    config.font_family = ss(ui->fontComboBox->currentFont().family());
+    config.boost_dir = ss(ui->edBoostPath->text());
+    config.qt_dir = ss(ui->edQtPath->text());
+    config.compiler = ss(ui->cbCompileType->currentText());
+    config.query_driver = ss(ui->edCompilePath->text());
+    config.project_name = ss(ui->edProjectName->text().trimmed());
+    return config;
 }
 
 QString MainWidget::SelectDirectory(QWidget* parent, QLineEdit* pEdit,
