@@ -5,13 +5,10 @@
     "cmake.configureOnOpen": true,
     "cmake.debugConfig": {
         "console": "integratedTerminal",
-        "visualizerFile": "${workspaceRoot}/.vscode/qt5.natvis",
-        "args": [
-            "-t", "common", "-d", "D:\\", "-n", "Hello"
-        ]
+        "visualizerFile": "${workspaceRoot}/.vscode/qt6.natvis"
     },
     "cmake.environment": {
-        "PATH": "${env:PATH};C:\\Qt\\Qt5.14.2\\5.14.2\\msvc2017\\bin"
+        "PATH": "${env:PATH};C:\\binary\\qt\\QT6.5.3_x64\\bin;C:\\binary\\cpp\\Boost\\1_84\\lib"
     },
     "cmake.options.statusBarVisibility": "visible",
     "cmake.generator": "Ninja",
