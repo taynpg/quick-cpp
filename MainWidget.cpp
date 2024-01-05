@@ -6,6 +6,8 @@ MainWidget::MainWidget(QWidget *parent)
     , ui(new Ui::MainWidget)
 {
     ui->setupUi(this);
+    setFixedHeight(210);
+    setMinimumWidth(650);
 }
 
 MainWidget::~MainWidget()
