@@ -20,8 +20,7 @@ constexpr auto COMPILER = "Compiler";
 constexpr auto FONT_SIZE = "FontSize";
 constexpr auto FONT_FAMILY = "FontFamily";
 constexpr auto QUERY_DRIVER = "QueryDriver";
-
-namespace fs = boost::filesystem;
+constexpr auto PROJECT_DIR = "ProjectDir";
 
 std::string ConfigOpr::get_home()
 {
@@ -42,38 +41,43 @@ void ConfigOpr::read_config(SConfig& config)
 {
     std::string home = get_home();
     fs::path config_dir = fs::path(home).append(".config").append("quick-cpp");
-    fs::path logfile = fs::path(config_dir).append("config.ini");
+    ini_path_ = fs::path(config_dir).append("config.ini");
 
     if (!fs::exists(config_dir)) {
         fs::create_directory(config_dir);
     }
-    if (!fs::exists(logfile)) {
-        set_default(logfile.string());
+    if (!fs::exists(ini_path_)) {
         return;
     }
     boost::property_tree::ptree pt, node;
-    boost::property_tree::ini_parser::read_ini(logfile.string(), pt);
+    boost::property_tree::ini_parser::read_ini(ini_path_.string(), pt);
     node = pt.get_child("Basic");
 
-    config.type = node.get<std::string>(DEFAULT_PROJECT_TYPE, "common");
-    config.boost_dir = node.get<std::string>(BOOST_DIR, R"(C:\Bin\Boost)");
+    config.project_type = node.get<std::string>(DEFAULT_PROJECT_TYPE, "console");
+    config.boost_dir = node.get<std::string>(BOOST_DIR, R"(C:/Bin/Boost)");
     config.font_size = node.get<int>(FONT_SIZE, 15);
     config.font_family = node.get<std::string>(FONT_FAMILY, "FiraCode Nerd Font Mono");
     config.query_driver = node.get<std::string>(QUERY_DRIVER, "/usr/bin/g++");
     config.compiler = node.get<std::string>(COMPILER, "msvc");
+    config.project_dir = node.get<std::string>(PROJECT_DIR, "D:/");
 }
 
-void ConfigOpr::set_default(const std::string& config_path)
+void ConfigOpr::save_config(const SConfig& config)
 {
     boost::property_tree::ptree pt, node;
 
-    node.put(DEFAULT_PROJECT_TYPE, "common");
-    node.put(BOOST_DIR, R"(C:\Bin\Boost)");
-    node.put(FONT_SIZE, 15);
-    node.put(FONT_FAMILY, "FiraCode Nerd Font Mono");
-    node.put(QUERY_DRIVER, "/usr/bin/g++");
-    node.put(COMPILER, "msvc");
+    if (fs::exists(ini_path_)) {
+        boost::property_tree::ini_parser::read_ini(ini_path_.string(), pt);
+        node = pt.get_child("Basic");
+    }
+    node.put(DEFAULT_PROJECT_TYPE, config.project_type);
+    node.put(BOOST_DIR, config.boost_dir);
+    node.put(QT_DIR, config.qt_dir);
+    node.put(FONT_SIZE, config.font_size);
+    node.put(FONT_FAMILY, config.font_family);
+    node.put(QUERY_DRIVER, config.query_driver);
+    node.put(COMPILER, config.compiler);
+    node.put(PROJECT_DIR, config.project_dir);
     pt.put_child("Basic", node);
-
-    boost::property_tree::ini_parser::write_ini(config_path, pt);
+    boost::property_tree::ini_parser::write_ini(ini_path_.string(), pt);
 }

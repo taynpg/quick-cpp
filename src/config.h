@@ -3,6 +3,8 @@
 #include <string>
 #include <boost/filesystem.hpp>
 
+namespace fs = boost::filesystem;
+
 struct SConfig {
     std::string config_path{};
     int         font_size{14};
@@ -12,7 +14,6 @@ struct SConfig {
     std::string boost_dir{};
     std::string project_type{};
     std::string compiler{};
-    std::string type{};
     std::string project_name{};
     std::string project_dir{};
 };
@@ -24,7 +25,8 @@ public:
 
 public:
     void read_config(SConfig& config);
-    void set_default(const std::string& config_path);
+    void save_config(const SConfig& config);
 private:
     std::string get_home();
+    fs::path ini_path_{};
 };

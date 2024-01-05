@@ -38,6 +38,7 @@ set(PROJECT_SOURCES
     MainWidget.h
     MainWidget.cpp
     MainWidget.ui
+    resource/ico.rc
 )
 
 add_executable(qcpp ${PROJECT_SOURCES})

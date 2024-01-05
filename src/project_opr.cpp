@@ -18,9 +18,9 @@ bool ProjectOpr::Run(const SConfig& config)
         return false;
     }
     clear();
-    source_main = "://template/" + config_.type + "/main.cpp";
+    source_main = "://template/" + config_.project_type + "/main.cpp";
     des_main = fs::path(purpose_dir).append("main.cpp").string();
-    source_cmakelist = "://template/" + config_.type + "/CMakeLists.txt";
+    source_cmakelist = "://template/" + config_.project_type + "/CMakeLists.txt";
     des_cmakelist =
         fs::path(purpose_dir).append("CMakeLists.txt").string();
 
@@ -54,7 +54,7 @@ void ProjectOpr::handle_setting()
     std::string newa{};
     std::string newb{};
 
-    if (config_.type == "common") {
+    if (config_.project_type == "console") {
         newa = "";
         newb = "";
     }

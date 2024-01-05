@@ -5,5 +5,6 @@
         <file>template/settings-msvc.json</file>
         <file>template/common/CMakeLists.txt</file>
         <file>template/common/main.cpp</file>
+        <file>resource/ico.ico</file>
     </qresource>
 </RCC>
