@@ -3,6 +3,7 @@ project(qcpp LANGUAGES CXX)
 
 set(CMAKE_PREFIX_PATH 
     "C:\\binary\\qt\\QT6.5.3_x64"
+    "C:\\binary\\qt\\QT6.5.3_x86"
     "C:\\binary\\cpp\\Boost\\1_84"
 )
 
