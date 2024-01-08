@@ -254,5 +254,11 @@ bool ProjectConsoleOpr::Run(const SConfig& config)
     handle_main();
     handle_setting();
     handle_cmakelist();
+
+    if (config_.is_export_clangd_ini) {
+        MCopy("://template/.clangd", qs(fs::path(purpose_dir_).append(".clangd").string()));
+        MCopy("://template/.clang-format", qs(fs::path(purpose_dir_).append(".clang-format").string()));
+    }
+
     return true;
 }

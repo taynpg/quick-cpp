@@ -12,7 +12,7 @@ MainWidget::MainWidget(QWidget* parent)
     setFixedHeight(210);
     setMinimumWidth(910);
     setWindowIcon(QIcon("://resource/ico.ico"));
-    setWindowTitle(u8"快速创建code可用的cmak工程 v1.0.1");
+    setWindowTitle(u8"快速创建code可用的cmak工程 v1.0.2");
 
     init_ui();
     read_ini();
@@ -45,6 +45,12 @@ void MainWidget::read_ini()
     if (!config.font_family.empty()) {
         ui->fontComboBox->setCurrentFont(QFont(qs(config.font_family)));
     }
+    if (config.is_export_clangd_ini) {
+        ui->cbExportClangdConfig->setCurrentText(u8"是");
+    }
+    else {
+        ui->cbExportClangdConfig->setCurrentText(u8"否");
+    }
 }
 
 void MainWidget::init_ui()
@@ -60,6 +66,10 @@ void MainWidget::init_ui()
     ui->cbProjectType->addItem("qt");
     ui->cbProjectType->addItem("boost");
     ui->cbProjectType->setCurrentIndex(0);
+
+    ui->cbExportClangdConfig->addItem(u8"是");
+    ui->cbExportClangdConfig->addItem(u8"否");
+    ui->cbExportClangdConfig->setCurrentText(u8"是");
 
     for (int i = 5; i < 30; ++i) {
         ui->cbFontSize->addItem(QString::number(i));
@@ -82,15 +92,14 @@ void MainWidget::generate_project()
     save_ini(false);
     SConfig config = read_ui();
 
-    delete project_;
     if (config.project_type == "console") {
-        project_ = new ProjectConsoleOpr();
+        project_ = std::make_shared<ProjectConsoleOpr>();
     }
     if (config.project_type == "qt") {
-        project_ = new ProjectQtOpr();
+        project_ = std::make_shared<ProjectQtOpr>();
     }
     if (config.project_type == "boost") {
-        project_ = new ProjectBoostOpr();
+        project_ = std::make_shared<ProjectBoostOpr>();
     }
 
     if (config.project_name.empty()) {
@@ -150,6 +159,13 @@ SConfig MainWidget::read_ui()
     config.compiler = ss(ui->cbCompileType->currentText());
     config.query_driver = ss(ui->edCompilePath->text());
     config.project_name = ss(ui->edProjectName->text().trimmed());
+
+    if (ui->cbExportClangdConfig->currentText() == u8"是") {
+        config.is_export_clangd_ini = true;
+    }
+    else {
+        config.is_export_clangd_ini = false;
+    }
 
     if (ui->rbStatic->isChecked()) {
         config.is_static = true;

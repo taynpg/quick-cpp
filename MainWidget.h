@@ -4,7 +4,9 @@
 #include <QLineEdit>
 #include <QString>
 #include <QWidget>
+#include <memory>
 #include <string>
+
 
 #include "src/config.h"
 #include "src/project_opr.h"
@@ -23,9 +25,9 @@ public:
     ~MainWidget();
 
 private:
-    void init_ui();
-    void read_ini();
-    void oper();
+    void    init_ui();
+    void    read_ini();
+    void    oper();
     SConfig read_ui();
 
 private:
@@ -33,14 +35,16 @@ private:
     void generate_project();
 
 private:
-    static QString SelectDirectory(QWidget* parent, QLineEdit* pEdit, const QString& pre_path = "");
+    static QString SelectDirectory(QWidget* parent, QLineEdit* pEdit,
+                                   const QString& pre_path = "");
     static QString SelectFile(QWidget* parent, QLineEdit* pEdit,
                               const QString& info, const QString& filter);
     static bool    isOk(QWidget* parent, const QString& title,
                         const QString& content);
+
 private:
-    Ui::MainWidget* ui;
-    ConfigOpr       opr_{};
-    ProjectOpr*     project_{};
+    Ui::MainWidget*             ui;
+    ConfigOpr                   opr_{};
+    std::shared_ptr<ProjectOpr> project_{};
 };
-#endif  // MAINWIDGET_H
+#endif // MAINWIDGET_H

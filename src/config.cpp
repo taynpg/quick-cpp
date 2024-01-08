@@ -21,6 +21,7 @@ constexpr auto FONT_SIZE = "FontSize";
 constexpr auto FONT_FAMILY = "FontFamily";
 constexpr auto QUERY_DRIVER = "QueryDriver";
 constexpr auto PROJECT_DIR = "ProjectDir";
+constexpr auto EXPORT_CLANGD_INI = "ClangdConfig";
 
 std::string ConfigOpr::get_home()
 {
@@ -61,6 +62,7 @@ void ConfigOpr::read_config(SConfig& config)
     config.compiler = node.get<std::string>(COMPILER, "msvc");
     config.project_dir = node.get<std::string>(PROJECT_DIR, "D:/");
     config.qt_dir = node.get<std::string>(QT_DIR, R"(C:/Bin/Qt)");
+    config.is_export_clangd_ini = node.get<bool>(EXPORT_CLANGD_INI, true);
 }
 
 void ConfigOpr::save_config(const SConfig& config)
@@ -79,6 +81,7 @@ void ConfigOpr::save_config(const SConfig& config)
     node.put(QUERY_DRIVER, config.query_driver);
     node.put(COMPILER, config.compiler);
     node.put(PROJECT_DIR, config.project_dir);
+    node.put(EXPORT_CLANGD_INI, config.is_export_clangd_ini);
     pt.put_child("Basic", node);
     boost::property_tree::ini_parser::write_ini(ini_path_.string(), pt);
 }

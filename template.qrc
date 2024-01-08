@@ -15,5 +15,7 @@
         <file>template/qt/MainWidget.cpp</file>
         <file>template/qt/MainWidget.h</file>
         <file>template/qt/MainWidget.ui</file>
+        <file>template/.clangd</file>
+        <file>template/.clang-format</file>
     </qresource>
 </RCC>

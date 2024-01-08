@@ -81,6 +81,16 @@
       <widget class="QLineEdit" name="edProjectName"/>
      </item>
      <item>
+      <widget class="QLabel" name="label_10">
+       <property name="text">
+        <string>是否导出默认clangd配置：</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="cbExportClangdConfig"/>
+     </item>
+     <item>
       <widget class="QLabel" name="label_5">
        <property name="text">
         <string>编译器：</string>
