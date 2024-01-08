@@ -12,7 +12,7 @@ MainWidget::MainWidget(QWidget* parent)
     setFixedHeight(210);
     setMinimumWidth(910);
     setWindowIcon(QIcon("://resource/ico.ico"));
-    setWindowTitle(u8"快速创建code可用的cmake工程 v1.0.2");
+    setWindowTitle(u8"快速创建code可用的cmake工程 v1.0.3");
 
     init_ui();
     read_ini();
