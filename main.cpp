@@ -1,7 +1,6 @@
 #include "MainWidget.h"
 
 #include <QApplication>
-#include <QStyleFactory>
 
 int main(int argc, char *argv[])
 {
@@ -11,7 +10,7 @@ int main(int argc, char *argv[])
 #endif
 
     QApplication a(argc, argv);
-    a.setStyle(QStyleFactory::create("fusion"));
+    a.setStyle("fusion");
     MainWidget w;
     w.show();
     return a.exec();

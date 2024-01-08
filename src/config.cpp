@@ -44,7 +44,7 @@ void ConfigOpr::read_config(SConfig& config)
     ini_path_ = fs::path(config_dir).append("config.ini");
 
     if (!fs::exists(config_dir)) {
-        fs::create_directory(config_dir);
+        fs::create_directories(config_dir);
     }
     if (!fs::exists(ini_path_)) {
         return;
