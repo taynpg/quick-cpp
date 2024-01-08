@@ -60,6 +60,7 @@ void ConfigOpr::read_config(SConfig& config)
     config.query_driver = node.get<std::string>(QUERY_DRIVER, "/usr/bin/g++");
     config.compiler = node.get<std::string>(COMPILER, "msvc");
     config.project_dir = node.get<std::string>(PROJECT_DIR, "D:/");
+    config.qt_dir = node.get<std::string>(QT_DIR, R"(C:/Bin/Qt)");
 }
 
 void ConfigOpr::save_config(const SConfig& config)
