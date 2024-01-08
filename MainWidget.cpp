@@ -10,7 +10,7 @@ MainWidget::MainWidget(QWidget* parent)
 {
     ui->setupUi(this);
     setFixedHeight(210);
-    setMinimumWidth(810);
+    setMinimumWidth(910);
     setWindowIcon(QIcon("://resource/ico.ico"));
     setWindowTitle(u8"快速创建code可用的cmak工程");
 
@@ -98,12 +98,18 @@ void MainWidget::generate_project()
         return;
     }
 
+    if ((config.compiler == "gnu" || config.compiler == "clang") && config.query_driver.empty()) {
+        QMessageBox::information(this, u8"提示", u8"未填写编译器路径");
+        return;
+    }
+
     if (project_->Run(config)) {
         QMessageBox::information(this, u8"提示", u8"已生成");
     } else {
         QMessageBox::information(
             this, u8"提示",
-            u8"生成失败，" + QString::fromStdString(project_->get_last_error()));
+            u8"生成失败，" +
+                QString::fromStdString(project_->get_last_error()));
     }
 }
 
@@ -120,13 +126,16 @@ void MainWidget::oper()
     connect(ui->btnSelectQt, &QPushButton::clicked, this,
             [=]() { SelectDirectory(this, ui->edQtPath, pre_qt_path); });
     connect(ui->btnCompile, &QPushButton::clicked, this, [=]() {
-        SelectFile(this, ui->edQtPath, u8"选择编译器",
+        SelectFile(this, ui->edCompilePath, u8"选择编译器",
                    u8"可执行文件 (*.exe);;所有文件 (*.*)");
     });
 
     connect(ui->btnSave, &QPushButton::clicked, this, [=]() { save_ini(); });
     connect(ui->btnGenereate, &QPushButton::clicked, this,
             &MainWidget::generate_project);
+
+    connect(ui->btnExit, &QPushButton::clicked, this,
+            [=]() { QApplication::exit(); });
 }
 
 SConfig MainWidget::read_ui()
@@ -141,11 +150,10 @@ SConfig MainWidget::read_ui()
     config.compiler = ss(ui->cbCompileType->currentText());
     config.query_driver = ss(ui->edCompilePath->text());
     config.project_name = ss(ui->edProjectName->text().trimmed());
-    
+
     if (ui->rbStatic->isChecked()) {
         config.is_static = true;
-    }
-    else {
+    } else {
         config.is_static = false;
     }
     return config;

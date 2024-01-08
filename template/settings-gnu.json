@@ -5,7 +5,6 @@
     "cmake.configureOnOpen": true,
     "cmake.debugConfig": {
         "console": "integratedTerminal",
-        "visualizerFile": "${workspaceRoot}/.vscode/qt5.natvis",
         "setupCommands": [
             {
                 "description": "-gdb-set charset utf-8",

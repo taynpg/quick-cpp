@@ -2,10 +2,12 @@
 
 #include <string>
 #include <QString>
+#include <QFile>
 #include "config.h"
 
 std::string ss(const QString& str);
 QString     qs(const std::string& str);
+void MCopy(const QString& from, const QString& des);
 
 class ProjectOpr {
 public:

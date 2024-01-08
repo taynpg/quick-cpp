@@ -18,6 +18,13 @@ QString qs(const std::string& str)
     return QString::fromLocal8Bit(str.c_str());
 }
 
+void MCopy(const QString& from, const QString& des)
+{
+    QFile::copy(from, des);
+    QFile file(des);
+    file.setPermissions(QFile::ReadOwner | QFile::WriteOwner);
+}
+
 bool ProjectOpr::Run(const SConfig& config)
 {
     config_ = config;
@@ -67,11 +74,11 @@ void ProjectQtOpr::handle_setting()
     boost::replace_all(settings_, "replaceB", newb);
     ProjectOpr::basic_replace();
 
-    QFile::copy(
+    MCopy(
         "://template/qt5.natvis",
         QString::fromLocal8Bit(
             fs::path(vscode_dir).append("qt5.natvis").string().c_str()));
-    QFile::copy(
+    MCopy(
         "://template/qt6.natvis",
         QString::fromLocal8Bit(
             fs::path(vscode_dir).append("qt6.natvis").string().c_str()));
@@ -140,15 +147,15 @@ void ProjectQtOpr::handle_main()
     std::string mwh(fs::path(dir).append("MainWidget.h").string());
     std::string mu(fs::path(dir).append("MainWidget.ui").string());
 
-    QFile::copy("://template/qt/main.cpp", qs(des_main));
-    QFile::copy("://template/qt/MainWidget.cpp", qs(mwc));
-    QFile::copy("://template/qt/MainWidget.h", qs(mwh));
-    QFile::copy("://template/qt/MainWidget.ui", qs(mu));
+    MCopy("://template/qt/main.cpp", qs(des_main));
+    MCopy("://template/qt/MainWidget.cpp", qs(mwc));
+    MCopy("://template/qt/MainWidget.h", qs(mwh));
+    MCopy("://template/qt/MainWidget.ui", qs(mu));
 }
 
 void ProjectConsoleOpr::handle_main()
 {
-    QFile::copy(QString::fromLocal8Bit(source_main.c_str()),
+    MCopy(QString::fromLocal8Bit(source_main.c_str()),
                 QString::fromLocal8Bit(des_main.c_str()));
 }
 
