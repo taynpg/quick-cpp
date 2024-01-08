@@ -7,7 +7,8 @@
 #include <memory>
 #include <string>
 
-
+#include "pub_handle.h"
+#include "shortkey.h"
 #include "src/config.h"
 #include "src/project_opr.h"
 

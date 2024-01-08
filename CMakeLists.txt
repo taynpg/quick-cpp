@@ -25,6 +25,7 @@ endif()
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rd/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Widgets)
 set(Boost_USE_STATIC_LIBS OFF)
@@ -32,6 +33,7 @@ find_package(Boost REQUIRED filesystem)
 include_directories(${Boost_INCLUDE_DIR})
 
 set(PROJECT_SOURCES
+    pub_handle.h pub_handle.cpp
     template.qrc
     main.cpp
     src/config.cpp
@@ -40,6 +42,7 @@ set(PROJECT_SOURCES
     MainWidget.cpp
     MainWidget.ui
     resource/ico.rc
+    shortkey.h shortkey.cpp shortkey.ui
 )
 
 add_executable(qcpp ${PROJECT_SOURCES})

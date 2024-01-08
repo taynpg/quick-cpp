@@ -83,7 +83,7 @@ void MainWidget::save_ini(bool is_notice)
     opr_.save_config(config);
 
     if (is_notice) {
-        QMessageBox::information(this, u8"提示", u8"已保存");
+        message(this, u8"已保存");
     }
 }
 
@@ -103,20 +103,20 @@ void MainWidget::generate_project()
     }
 
     if (config.project_name.empty()) {
-        QMessageBox::information(this, u8"提示", u8"工程名为空");
+        message(this, u8"工程名为空");
         return;
     }
 
     if ((config.compiler == "gnu" || config.compiler == "clang") && config.query_driver.empty()) {
-        QMessageBox::information(this, u8"提示", u8"未填写编译器路径");
+        message(this, u8"未填写编译器路径");
         return;
     }
 
     if (project_->Run(config)) {
-        QMessageBox::information(this, u8"提示", u8"已生成");
+        message(this, u8"已生成");
     } else {
-        QMessageBox::information(
-            this, u8"提示",
+        message(
+            this, 
             u8"生成失败，" +
                 QString::fromStdString(project_->get_last_error()));
     }
@@ -145,6 +145,11 @@ void MainWidget::oper()
 
     connect(ui->btnExit, &QPushButton::clicked, this,
             [=]() { QApplication::exit(); });
+
+    connect(ui->btnSetShortkey, &QPushButton::clicked, this, [=]() {
+        std::shared_ptr<ShortKey> key_set = std::make_shared<ShortKey>(this);
+        key_set->exec();
+    });
 }
 
 SConfig MainWidget::read_ui()

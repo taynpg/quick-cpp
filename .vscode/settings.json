@@ -8,7 +8,7 @@
         "visualizerFile": "${workspaceRoot}/.vscode/qt6.natvis"
     },
     "cmake.environment": {
-        "PATH": "${env:PATH};C:\\binary\\qt\\QT6.5.3_x64\\bin;C:\\binary\\cpp\\Boost\\1_84\\lib"
+        "PATH": "${env:PATH};C:\\binary\\qt\\QT6.5.3_x64\\bin;C:\\binary\\cpp\\Boost\\1_84\\lib;C:\\binary\\qt\\QT6.5.3_x86\\bin"
     },
     "cmake.options.statusBarVisibility": "visible",
     "cmake.generator": "Ninja",
