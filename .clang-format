@@ -1,7 +1,7 @@
 # .clang-format
 
 # 风格格式化
-BasedOnStyle: Google 
+BasedOnStyle: LLVM
 # 4 空格缩进
 IndentWidth: 4 
 # 连续对齐变量的声明

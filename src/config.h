@@ -1,7 +1,8 @@
 #pragma once
 
-#include <string>
 #include <boost/filesystem.hpp>
+#include <string>
+
 
 namespace fs = boost::filesystem;
 
@@ -15,6 +16,7 @@ struct SConfig {
     std::string compiler{};
     std::string project_name{};
     std::string project_dir{};
+    bool        is_static{};
 };
 
 class ConfigOpr {
@@ -25,7 +27,8 @@ public:
 public:
     void read_config(SConfig& config);
     void save_config(const SConfig& config);
+
 private:
     std::string get_home();
-    fs::path ini_path_{};
+    fs::path    ini_path_{};
 };

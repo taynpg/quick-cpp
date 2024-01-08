@@ -28,7 +28,7 @@ find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Widgets)
 set(Boost_USE_STATIC_LIBS OFF)
 find_package(Boost REQUIRED filesystem)
-include_directories(${Boost_INCLUDES})
+include_directories(${Boost_INCLUDE_DIR})
 
 set(PROJECT_SOURCES
     template.qrc

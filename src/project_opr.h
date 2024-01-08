@@ -1,8 +1,11 @@
 #pragma once
 
 #include <string>
-
+#include <QString>
 #include "config.h"
+
+std::string ss(const QString& str);
+QString     qs(const std::string& str);
 
 class ProjectOpr {
 public:
@@ -14,15 +17,17 @@ public:
     std::string  get_last_error();
 
 protected:
-    static std::string read_txt(const std::string& path);
-    static bool  write_txt(const std::string& path, const std::string& content);
+    std::string  read_txt(const std::string& path);
+    bool         write_txt(const std::string& path, const std::string& content);
     virtual void handle_setting() = 0;
     virtual void handle_main() = 0;
     virtual void handle_cmakelist() = 0;
     virtual void clear();
+    virtual void basic_replace();
 
 protected:
-    SConfig config_{};
+    SConfig     config_{};
+    std::string settings_{};
 
     std::string source_main{};
     std::string des_main{};
@@ -43,4 +48,30 @@ public:
 
 public:
     bool Run(const SConfig& config) override;
+    void handle_setting() override;
+    void handle_main() override;
+    void handle_cmakelist() override;
+};
+
+class ProjectQtOpr : public ProjectConsoleOpr {
+public:
+    ProjectQtOpr() = default;
+    virtual ~ProjectQtOpr() = default;
+
+public:
+    bool Run(const SConfig& config) override;
+    void handle_setting() override;
+    void handle_main() override;
+    void handle_cmakelist() override;
+};
+
+class ProjectBoostOpr : public ProjectConsoleOpr {
+public:
+    ProjectBoostOpr() = default;
+    virtual ~ProjectBoostOpr() override = default;
+
+public:
+    bool Run(const SConfig& config) override;
+    void handle_setting() override;
+    void handle_cmakelist() override;
 };

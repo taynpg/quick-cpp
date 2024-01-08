@@ -5,16 +5,6 @@
 
 #include "./ui_MainWidget.h"
 
-std::string ss(const QString& str)
-{
-    return std::string(str.toLocal8Bit().constData());
-}
-
-QString qs(const std::string& str)
-{
-    return QString::fromLocal8Bit(str.c_str());
-}
-
 MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent), ui(new Ui::MainWidget)
 {
@@ -22,7 +12,7 @@ MainWidget::MainWidget(QWidget* parent)
     setFixedHeight(210);
     setMinimumWidth(810);
     setWindowIcon(QIcon("://resource/ico.ico"));
-    setWindowTitle(u8"快速创建方便code使用的cmak工程");
+    setWindowTitle(u8"快速创建code可用的cmak工程");
 
     init_ui();
     read_ini();
@@ -59,6 +49,8 @@ void MainWidget::read_ini()
 
 void MainWidget::init_ui()
 {
+    ui->rbDynamic->setChecked(true);
+
     ui->cbCompileType->addItem("msvc");
     ui->cbCompileType->addItem("gnu");
     ui->cbCompileType->addItem("clang");
@@ -90,16 +82,28 @@ void MainWidget::generate_project()
     save_ini(false);
     SConfig config = read_ui();
 
+    delete project_;
+    if (config.project_type == "console") {
+        project_ = new ProjectConsoleOpr();
+    }
+    if (config.project_type == "qt") {
+        project_ = new ProjectQtOpr();
+    }
+    if (config.project_type == "boost") {
+        project_ = new ProjectBoostOpr();
+    }
+
     if (config.project_name.empty()) {
         QMessageBox::information(this, u8"提示", u8"工程名为空");
         return;
     }
 
-    if (project_.Run(config)) {
+    if (project_->Run(config)) {
         QMessageBox::information(this, u8"提示", u8"已生成");
-    }
-    else {
-        QMessageBox::information(this, u8"提示", u8"生成失败，" + QString::fromStdString(project_.get_last_error()));
+    } else {
+        QMessageBox::information(
+            this, u8"提示",
+            u8"生成失败，" + QString::fromStdString(project_->get_last_error()));
     }
 }
 
@@ -137,6 +141,13 @@ SConfig MainWidget::read_ui()
     config.compiler = ss(ui->cbCompileType->currentText());
     config.query_driver = ss(ui->edCompilePath->text());
     config.project_name = ss(ui->edProjectName->text().trimmed());
+    
+    if (ui->rbStatic->isChecked()) {
+        config.is_static = true;
+    }
+    else {
+        config.is_static = false;
+    }
     return config;
 }
 

@@ -8,5 +8,12 @@
         <file>template/console/main.cpp</file>
         <file>template/qt5.natvis</file>
         <file>template/qt6.natvis</file>
+        <file>template/boost/CMakeLists.txt</file>
+        <file>template/boost/main.cpp</file>
+        <file>template/qt/CMakeLists.txt</file>
+        <file>template/qt/main.cpp</file>
+        <file>template/qt/MainWidget.cpp</file>
+        <file>template/qt/MainWidget.h</file>
+        <file>template/qt/MainWidget.ui</file>
     </qresource>
 </RCC>

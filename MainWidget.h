@@ -9,10 +9,6 @@
 #include "src/config.h"
 #include "src/project_opr.h"
 
-
-std::string ss(const QString& str);
-QString     qs(const std::string& str);
-
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWidget;
@@ -45,6 +41,6 @@ private:
 private:
     Ui::MainWidget* ui;
     ConfigOpr       opr_{};
-    ProjectOpr      project_{};
+    ProjectOpr*     project_{};
 };
 #endif  // MAINWIDGET_H

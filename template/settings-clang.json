@@ -4,12 +4,8 @@
     "editor.fontFamily": "'replaceD', 'replaceD', 'replaceD'",
     "cmake.configureOnOpen": true,
     "cmake.debugConfig": {
-        "console": "integratedTerminal",
-        "visualizerFile": "${workspaceRoot}/.vscode/qt5.natvis"
-    },
-    "cmake.environment": {
-        "PATH": "${env:PATH};C:\\Qt\\Qt5.14.2\\5.14.2\\msvc2017\\bin"
-    },
+        "console": "integratedTerminal"replaceA
+    },replaceB
     "cmake.options.statusBarVisibility": "visible",
     "cmake.generator": "Ninja",
     "C_Cpp.intelliSenseEngine": "disabled",
@@ -24,7 +20,7 @@
         "--background-index",
         "--ranking-model=heuristics",
         "--function-arg-placeholders=false",
-        "--query-driver=/usr/bin/clang++"
+        "--query-driver=replaceE"
     ],
     "editor.inlayHints.enabled": "off",
     "editor.unicodeHighlight.allowedLocales": {
