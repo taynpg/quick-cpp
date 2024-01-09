@@ -12,6 +12,8 @@
 
 ![示例图片](https://github.com/taynpg/quick-cpp/raw/main/img/show.png)
 
+注：界面中的`静态库`和`动态库`指的是`Qt`或者`Boost`库是动态的还是静态的。
+
 # 2.说明
 
 - 本工具生成的工程使用的是`clangd`索引，[官网下载](https://github.com/clangd/clangd/releases)，解压后请添加环境变量，并在`vscode`中安装`clangd`插件，生成器使用的是`Ninja`，[Ninja下载](https://github.com/ninja-build/ninja/releases)后添加环境变量。
