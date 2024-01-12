@@ -10,7 +10,7 @@ MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent), ui(new Ui::MainWidget)
 {
     ui->setupUi(this);
-    setFixedHeight(230);
+    setFixedHeight(250);
     setMinimumWidth(910);
     setWindowIcon(QIcon("://resource/ico.ico"));
     setWindowTitle(u8"快速创建code可用的cmake工程 v1.0.4");
@@ -50,6 +50,11 @@ void MainWidget::read_ini()
         ui->cbExportClangdConfig->setCurrentText(u8"是");
     } else {
         ui->cbExportClangdConfig->setCurrentText(u8"否");
+    }
+    if (config.is_export_cmakesetting) {
+        ui->cbExportCMakeSetting->setCurrentText(u8"是");
+    } else {
+        ui->cbExportCMakeSetting->setCurrentText(u8"否");
     }
 }
 
@@ -128,7 +133,7 @@ void MainWidget::generate_project()
 void MainWidget::copy_to_clipboard() 
 {
     QString     content = "\"PATH\": \"";
-    content.append(ui->edBoostPath->text() + ";");
+    content.append(ui->edBoostPath->text() + "/lib;");
     content.append(ui->edQtPath->text() + ";\"");
     QClipboard* clip = QApplication::clipboard();
     clip->setText(content);

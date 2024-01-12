@@ -22,6 +22,7 @@ constexpr auto FONT_FAMILY = "FontFamily";
 constexpr auto QUERY_DRIVER = "QueryDriver";
 constexpr auto PROJECT_DIR = "ProjectDir";
 constexpr auto EXPORT_CLANGD_INI = "ClangdConfig";
+constexpr auto EXPORT_CMAKE_SETTING = "CMakeSettingConfig";
 
 std::string ConfigOpr::get_home()
 {
@@ -63,6 +64,7 @@ void ConfigOpr::read_config(SConfig& config)
     config.project_dir = node.get<std::string>(PROJECT_DIR, "D:/");
     config.qt_dir = node.get<std::string>(QT_DIR, R"(C:/Bin/Qt)");
     config.is_export_clangd_ini = node.get<bool>(EXPORT_CLANGD_INI, true);
+    config.is_export_cmakesetting = node.get<bool>(EXPORT_CMAKE_SETTING, false);
 }
 
 void ConfigOpr::save_config(const SConfig& config)
@@ -82,6 +84,7 @@ void ConfigOpr::save_config(const SConfig& config)
     node.put(COMPILER, config.compiler);
     node.put(PROJECT_DIR, config.project_dir);
     node.put(EXPORT_CLANGD_INI, config.is_export_clangd_ini);
+    node.put(EXPORT_CMAKE_SETTING, config.is_export_cmakesetting);
     pt.put_child("Basic", node);
     boost::property_tree::ini_parser::write_ini(ini_path_.string(), pt);
 }
