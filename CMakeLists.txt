@@ -5,6 +5,8 @@ set(CMAKE_PREFIX_PATH
     "C:\\binary\\qt\\QT6.5.3_x64"
     "C:\\binary\\qt\\QT6.5.3_x86"
     "C:\\binary\\cpp\\Boost\\1_84"
+    "/opt/homebrew/Cellar/qt@5/5.15.12"
+    "/Users/tangyunpeng/mdev/Boost"
 )
 
 set(CMAKE_AUTOMOC ON)
@@ -28,7 +30,13 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Widgets)
-set(Boost_USE_STATIC_LIBS OFF)
+
+# Unix系统boost编译的是静态库
+if (UNIX)
+    set(Boost_USE_STATIC_LIBS ON)
+else()
+    set(Boost_USE_STATIC_LIBS OFF)
+endif()
 find_package(Boost REQUIRED filesystem)
 include_directories(${Boost_INCLUDE_DIR})
 
