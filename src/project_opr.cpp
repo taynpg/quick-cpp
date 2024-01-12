@@ -32,6 +32,12 @@ bool ProjectOpr::Run(const SConfig& config)
 
     fs::create_directory(purpose_dir_);
     fs::create_directory(vscode_dir);
+
+    if (config_.is_export_cmakesetting) {
+        MCopy("://template/CMakeSettings.json",
+              qs(fs::path(purpose_dir_).append("CMakeSettings.json").string()));
+    }
+
     return true;
 }
 

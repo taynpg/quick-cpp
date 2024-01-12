@@ -18,6 +18,7 @@ struct SConfig {
     std::string project_dir{};
     bool        is_static{};
     bool        is_export_clangd_ini{};
+    bool        is_export_cmakesetting{};
 };
 
 class ConfigOpr {

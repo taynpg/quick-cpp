@@ -2,6 +2,7 @@
 
 #include <QFileDialog>
 #include <QMessageBox>
+#include <QClipBoard>
 
 #include "./ui_MainWidget.h"
 
@@ -9,10 +10,10 @@ MainWidget::MainWidget(QWidget* parent)
     : QWidget(parent), ui(new Ui::MainWidget)
 {
     ui->setupUi(this);
-    setFixedHeight(210);
+    setFixedHeight(230);
     setMinimumWidth(910);
     setWindowIcon(QIcon("://resource/ico.ico"));
-    setWindowTitle(u8"快速创建code可用的cmake工程 v1.0.3");
+    setWindowTitle(u8"快速创建code可用的cmake工程 v1.0.4");
 
     init_ui();
     read_ini();
@@ -47,8 +48,7 @@ void MainWidget::read_ini()
     }
     if (config.is_export_clangd_ini) {
         ui->cbExportClangdConfig->setCurrentText(u8"是");
-    }
-    else {
+    } else {
         ui->cbExportClangdConfig->setCurrentText(u8"否");
     }
 }
@@ -70,6 +70,10 @@ void MainWidget::init_ui()
     ui->cbExportClangdConfig->addItem(u8"是");
     ui->cbExportClangdConfig->addItem(u8"否");
     ui->cbExportClangdConfig->setCurrentText(u8"是");
+
+    ui->cbExportCMakeSetting->addItem(u8"是");
+    ui->cbExportCMakeSetting->addItem(u8"否");
+    ui->cbExportCMakeSetting->setCurrentText(u8"否");
 
     for (int i = 5; i < 30; ++i) {
         ui->cbFontSize->addItem(QString::number(i));
@@ -107,7 +111,8 @@ void MainWidget::generate_project()
         return;
     }
 
-    if ((config.compiler == "gnu" || config.compiler == "clang") && config.query_driver.empty()) {
+    if ((config.compiler == "gnu" || config.compiler == "clang") &&
+        config.query_driver.empty()) {
         message(this, u8"未填写编译器路径");
         return;
     }
@@ -115,11 +120,19 @@ void MainWidget::generate_project()
     if (project_->Run(config)) {
         message(this, u8"已生成");
     } else {
-        message(
-            this, 
-            u8"生成失败，" +
-                QString::fromStdString(project_->get_last_error()));
+        message(this, u8"生成失败，" +
+                          QString::fromStdString(project_->get_last_error()));
     }
+}
+
+void MainWidget::copy_to_clipboard() 
+{
+    QString     content = "\"PATH\": \"";
+    content.append(ui->edBoostPath->text() + ";");
+    content.append(ui->edQtPath->text() + ";\"");
+    QClipboard* clip = QApplication::clipboard();
+    clip->setText(content);
+    message(this, u8"已复制");
 }
 
 void MainWidget::oper()
@@ -150,6 +163,9 @@ void MainWidget::oper()
         std::shared_ptr<ShortKey> key_set = std::make_shared<ShortKey>(this);
         key_set->exec();
     });
+
+    connect(ui->btnCopyEnv, &QPushButton::clicked, this,
+            &MainWidget::copy_to_clipboard);
 }
 
 SConfig MainWidget::read_ui()
@@ -167,9 +183,14 @@ SConfig MainWidget::read_ui()
 
     if (ui->cbExportClangdConfig->currentText() == u8"是") {
         config.is_export_clangd_ini = true;
-    }
-    else {
+    } else {
         config.is_export_clangd_ini = false;
+    }
+
+    if (ui->cbExportCMakeSetting->currentText() == u8"是") {
+        config.is_export_cmakesetting = true;
+    } else {
+        config.is_export_cmakesetting = false;
     }
 
     if (ui->rbStatic->isChecked()) {

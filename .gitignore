@@ -1,3 +1,5 @@
 buil*
 *.autosave
 .cach*
+out
+.vs
