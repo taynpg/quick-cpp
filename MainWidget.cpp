@@ -101,6 +101,12 @@ void MainWidget::generate_project()
     save_ini(false);
     SConfig config = read_ui();
 
+    QDir dir(qs(config.project_dir));
+    if (!dir.exists()) {
+        message(this, u8"工程目录不存在");
+        return;
+    }
+
     if (config.project_type == "console") {
         project_ = std::make_shared<ProjectConsoleOpr>();
     }
