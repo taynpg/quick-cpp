@@ -16,6 +16,14 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets)
 
+if (MSVC)
+    if(${QT_VERSION_MAJOR} LESS 6)
+        add_compile_options(/source-charset:utf-8)
+    endif()
+    add_compile_options(/EHsc)
+    add_compile_options(-D_CRT_SECURE_NO_WARNINGS)
+endif()
+
 set(PROJECT_SOURCES
         main.cpp
         MainWidget.cpp

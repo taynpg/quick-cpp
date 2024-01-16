@@ -37,7 +37,8 @@ bool ProjectOpr::Run(const SConfig& config)
         MCopy("://template/CMakeSettings.json",
               qs(fs::path(purpose_dir_).append("CMakeSettings.json").string()));
     }
-
+    MCopy("://template/.gitignore",
+          qs(fs::path(purpose_dir_).append(".gitignore").string()));
     return true;
 }
 
@@ -62,7 +63,8 @@ void ProjectQtOpr::handle_setting()
            "\"${workspaceRoot}/.vscode/qt6.natvis\"";
 
     if (!config_.is_static) {
-        newb = "\n    \"cmake.environment\": {\n        \"PATH\": \"${env:PATH};";
+        newb =
+            "\n    \"cmake.environment\": {\n        \"PATH\": \"${env:PATH};";
         newb.append(config_.qt_dir + "/bin\"\n    },");
     }
 
@@ -70,14 +72,12 @@ void ProjectQtOpr::handle_setting()
     boost::replace_all(settings_, "replaceB", newb);
     ProjectOpr::basic_replace();
 
-    MCopy(
-        "://template/qt5.natvis",
-        QString::fromLocal8Bit(
-            fs::path(vscode_dir).append("qt5.natvis").string().c_str()));
-    MCopy(
-        "://template/qt6.natvis",
-        QString::fromLocal8Bit(
-            fs::path(vscode_dir).append("qt6.natvis").string().c_str()));
+    MCopy("://template/qt5.natvis",
+          QString::fromLocal8Bit(
+              fs::path(vscode_dir).append("qt5.natvis").string().c_str()));
+    MCopy("://template/qt6.natvis",
+          QString::fromLocal8Bit(
+              fs::path(vscode_dir).append("qt6.natvis").string().c_str()));
 
     if (settings_.empty()) {
         return;
@@ -92,7 +92,8 @@ void ProjectBoostOpr::handle_setting()
     std::string newb{};
 
     if (!config_.is_static) {
-        newb = "\n    \"cmake.environment\": {\n        \"PATH\": \"${env:PATH};";
+        newb =
+            "\n    \"cmake.environment\": {\n        \"PATH\": \"${env:PATH};";
         newb.append(config_.boost_dir + "/lib\"\n    },");
     }
 
@@ -152,7 +153,7 @@ void ProjectQtOpr::handle_main()
 void ProjectConsoleOpr::handle_main()
 {
     MCopy(QString::fromLocal8Bit(source_main.c_str()),
-                QString::fromLocal8Bit(des_main.c_str()));
+          QString::fromLocal8Bit(des_main.c_str()));
 }
 
 void ProjectQtOpr::handle_cmakelist()
@@ -175,8 +176,7 @@ void ProjectBoostOpr::handle_cmakelist()
 
     if (config_.is_static) {
         boost::replace_all(cmakelist, "replaceC", "ON");
-    }
-    else {
+    } else {
         boost::replace_all(cmakelist, "replaceC", "OFF");
     }
 
@@ -252,8 +252,10 @@ bool ProjectConsoleOpr::Run(const SConfig& config)
     handle_cmakelist();
 
     if (config_.is_export_clangd_ini) {
-        MCopy("://template/.clangd", qs(fs::path(purpose_dir_).append(".clangd").string()));
-        MCopy("://template/.clang-format", qs(fs::path(purpose_dir_).append(".clang-format").string()));
+        MCopy("://template/.clangd",
+              qs(fs::path(purpose_dir_).append(".clangd").string()));
+        MCopy("://template/.clang-format",
+              qs(fs::path(purpose_dir_).append(".clang-format").string()));
     }
 
     return true;
