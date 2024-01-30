@@ -36,6 +36,21 @@ bool ProjectOpr::Run(const SConfig& config)
     if (config_.is_export_cmakesetting) {
         MCopy("://template/CMakeSettings.json",
               qs(fs::path(purpose_dir_).append("CMakeSettings.json").string()));
+        std::string vs_ini = fs::path(purpose_dir_).append(".vs").string();
+        std::string vs_ini_file =
+            fs::path(vs_ini).append("launch.vs.json").string();
+        fs::create_directory(vs_ini);
+        std::string vs_json = read_txt("://template/launch.vs.json");
+        std::string path_env{};
+        if (!config_.qt_dir.empty()) {
+            path_env.append(config.qt_dir + "/bin;");
+        }
+        if (!config_.boost_dir.empty()) {
+            path_env.append(config.boost_dir + "/lib;");
+        }
+        boost::replace_all(vs_json, "replaceA", config_.project_name);
+        boost::replace_all(vs_json, "replaceB", path_env);
+        write_txt(vs_ini_file, vs_json);
     }
     MCopy("://template/.gitignore",
           qs(fs::path(purpose_dir_).append(".gitignore").string()));

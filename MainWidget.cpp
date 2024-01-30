@@ -13,7 +13,7 @@ MainWidget::MainWidget(QWidget* parent)
     setFixedHeight(250);
     setMinimumWidth(910);
     setWindowIcon(QIcon("://resource/ico.ico"));
-    setWindowTitle(u8"快速创建code可用的cmake工程 v1.0.5");
+    setWindowTitle(u8"快速创建code可用的cmake工程 v1.0.6");
 
     init_ui();
     read_ini();
@@ -136,11 +136,19 @@ void MainWidget::generate_project()
     }
 }
 
-void MainWidget::copy_to_clipboard() 
+void MainWidget::copy_to_clipboard(int type)
 {
-    QString     content = "\"PATH\": \"";
-    content.append(ui->edBoostPath->text() + "/lib;");
-    content.append(ui->edQtPath->text() + ";\"");
+    QString content{};
+    switch (type) {
+    case 0:
+        content.append(ui->edBoostPath->text() + "/lib;");
+        break;
+    case 1:
+        content.append(ui->edQtPath->text() + "/bin;");
+        break;
+    default:
+        break;
+    }
     QClipboard* clip = QApplication::clipboard();
     clip->setText(content);
     message(this, u8"已复制");
@@ -175,8 +183,10 @@ void MainWidget::oper()
         key_set->exec();
     });
 
-    connect(ui->btnCopyEnv, &QPushButton::clicked, this,
-            &MainWidget::copy_to_clipboard);
+    connect(ui->btnCopyQtDir, &QPushButton::clicked, this,
+            [=]() { copy_to_clipboard(1); });
+    connect(ui->btnCopyBoostDir, &QPushButton::clicked, this,
+            [=]() { copy_to_clipboard(0); });
 }
 
 SConfig MainWidget::read_ui()

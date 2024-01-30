@@ -1,0 +1,15 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "qcpp.exe",
+      "name": "qcpp.exe",
+      "env": {
+        "PATH": "C:/binary/cpp/Boost/1_84/lib;C:/Qt/Qt5.14.2/5.14.2/msvc2017/bin;"
+      }
+    }
+  ]
+}

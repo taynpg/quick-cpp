@@ -2,8 +2,7 @@ cmake_minimum_required(VERSION 3.16)
 project(qcpp LANGUAGES CXX)
 
 set(CMAKE_PREFIX_PATH 
-    "C:\\binary\\qt\\QT6.5.3_x64"
-    "C:\\binary\\qt\\QT6.5.3_x86"
+    "C:/Qt/Qt5.14.2/5.14.2/msvc2017"
     "C:\\binary\\cpp\\Boost\\1_84"
     "/opt/homebrew/Cellar/qt@5/5.15.12"
     "/Users/tangyunpeng/mdev/Boost"
@@ -19,17 +18,19 @@ if (NOT CMAKE_BUILD_TYPE)
     set(CMAKE_BUILD_TYPE "Release")
 endif()
 
-if (MSVC)
-    #add_compile_options(/source-charset:utf-8)
-    add_compile_options(/EHsc)
-    add_definitions(-D_CRT_SECURE_NO_WARNINGS)
-endif()
-
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/3rd/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/src/)
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Widgets)
+
+if (MSVC)
+    if(${QT_VERSION_MAJOR} LESS 6)
+        add_compile_options(/source-charset:utf-8)
+    endif()
+    add_compile_options(/EHsc)
+    add_compile_options(-D_CRT_SECURE_NO_WARNINGS)
+endif()
 
 # Unix系统boost编译的是静态库
 if (UNIX)

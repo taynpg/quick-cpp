@@ -34,7 +34,7 @@ private:
 private:
     void save_ini(bool is_notice = true);
     void generate_project();
-    void copy_to_clipboard();
+    void copy_to_clipboard(int type);
 
 private:
     static QString SelectDirectory(QWidget* parent, QLineEdit* pEdit,

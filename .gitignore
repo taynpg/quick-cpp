@@ -2,7 +2,8 @@ buil*
 *.autosave
 .cach*
 out
-.vs
+.vs/*
+!.vs/launch.vs.json
 *.use
 *.user
 cmake-*

@@ -18,5 +18,6 @@
         <file>template/.clangd</file>
         <file>template/.clang-format</file>
         <file>template/CMakeSettings.json</file>
+        <file>template/launch.vs.json</file>
     </qresource>
 </RCC>

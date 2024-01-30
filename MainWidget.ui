@@ -156,13 +156,6 @@
       <widget class="QComboBox" name="cbExportCMakeSetting"/>
      </item>
      <item>
-      <widget class="QPushButton" name="btnCopyEnv">
-       <property name="text">
-        <string>复制Launch.vs.json环境PATH变量</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <spacer name="horizontalSpacer_4">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -197,6 +190,13 @@
       <widget class="QLineEdit" name="edBoostPath"/>
      </item>
      <item>
+      <widget class="QPushButton" name="btnCopyBoostDir">
+       <property name="text">
+        <string>复制</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="QPushButton" name="btnSelectBoost">
        <property name="text">
         <string>选择</string>
@@ -216,6 +216,13 @@
      </item>
      <item>
       <widget class="QLineEdit" name="edQtPath"/>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnCopyQtDir">
+       <property name="text">
+        <string>复制</string>
+       </property>
+      </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnSelectQt">
